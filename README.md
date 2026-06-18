@@ -36,15 +36,13 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
       <td>
         <b>ArtNet Scan</b><br/>
         One pass discovers devices three ways and merges the result:
-        it sends `ArtPoll` (UDP 6454) and parses `ArtPollReply`, browses the mDNS
+        it sends <b>ArtPoll</b> (UDP 6454) and parses <b>ArtPollReply</b>, browses the mDNS
         service types, and probes each host over HTTP. Each device is a card showing its
         IP (a link that opens the device's web page), short/long name and — for
         ArtNetEsp nodes — chip/firmware; source chips mark how it was found.
         </td>
         <td>
-        <a href="docs/images/Screenshot_20260617_203854.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_203854.jpg" alt="Thumbnail Alt Text" width="100" />
-        </a>
+          <img src="docs/images/Screenshot_20260617_203854-thumb.jpg" alt="Thumbnail Alt Text" width="200"/>
       </td>
     </tr>
     <tr>
@@ -59,42 +57,32 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         <a href="docs/DEVICE_CONFIG_PARITY.md">docs/DEVICE_CONFIG_PARITY.md</a>
         <br/>
         <div align="center">
-        <a href="docs/images/Screenshot_20260617_210330.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_210330.jpg" alt="Scan" width="100" />
-        </a>
-        <a href="docs/images/Screenshot_20260617_210352.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_210352.jpg" alt="Scan" width="100" />
-        </a>
-        <a href="docs/images/Screenshot_20260617_210401.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_210401.jpg" alt="Scan" width="100" />
-        </a>
+          <img src="docs/images/Screenshot_20260617_210330-thumb.jpg" alt="Scan" width="100" />
+          <img src="docs/images/Screenshot_20260617_210352-thumb.jpg" alt="Scan" width="100" />
+          <img src="docs/images/Screenshot_20260617_210401-thumb.jpg" alt="Scan" width="100" />
         </div>
       </td>
     </tr>
     <tr>
       <td>
         <b>Monitor</b><br/>
-        Listens for `ArtDmx` on a chosen universe; a **Channels** sub-tab
-        shows the live 512-channel fader grid and a **Packets** sub-tab shows source IP,
+        Listens for `ArtDmx` on a chosen universe; a <b>Channels</b> sub-tab
+        shows the live 512-channel fader grid and a <b>Packets</b> sub-tab shows source IP,
         packet count, last sequence and a rolling packet log. UI updates are throttled
         (~10 Hz) so high packet rates never freeze the app.
       </td>
       <td>
-        <a href="docs/images/Screenshot_20260617_203929.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_203929.jpg" alt="Monitor" width="200" />
-        </a>
+        <img src="docs/images/Screenshot_20260617_203929-thumb.jpg" alt="Monitor" width="200" />
       </td>
     </tr>
     <tr>
       <td>
         <b>Transmit</b><br/>
-        Sends a valid 512-channel `ArtDmx` frame with one test channel
+        Sends a valid 512-channel <b>ArtDmx</b> frame with one test channel
         set. Carries a clear warning that it can drive real lighting.
       </td>
       <td>
-        <a href="docs/images/Screenshot_20260617_203944.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_203944.jpg" alt="Monitor" width="200" />
-        </a>
+        <img src="docs/images/Screenshot_20260617_203944-thumb.jpg" alt="Monitor" width="200" />
       </td>
     </tr>
     <tr>
@@ -107,9 +95,7 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         still works.
       </td>
       <td>
-        <a href="docs/images/Screenshot_20260617_204004.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_204004.jpg" alt="Monitor" width="200" />
-        </a>
+        <img src="docs/images/Screenshot_20260617_204004-thumb.jpg" alt="Monitor" width="200" />
       </td>
     </tr>
     <tr>
@@ -119,13 +105,11 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         UDP port, mDNS service types, listen timeout, monitor packet-log limit,
         default device HTTP-auth credentials, debug-logging toggle. Persisted with
         `shared_preferences`, except device credentials (default + per-device), which
-        are stored **encrypted** via `flutter_secure_storage` (Keychain / Android
+        are stored <b>encrypted</b> via `flutter_secure_storage` (Keychain / Android
         Keystore)
       </td>
       <td>
-        <a href="docs/images/Screenshot_20260617_204035.jpg" target="_blank">
-          <img src="docs/images/Screenshot_20260617_204035.jpg" alt="Monitor" width="200" />
-        </a>
+        <img src="docs/images/Screenshot_20260617_204035-thumb.jpg" alt="Monitor" width="200" />
       </td>
     </tr>
   </table>
