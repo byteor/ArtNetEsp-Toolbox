@@ -31,35 +31,104 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
 
 ## What it does
 
-- **ArtNet Scan** — one pass discovers devices three ways and merges the result:
-  it sends `ArtPoll` (UDP 6454) and parses `ArtPollReply`, browses the mDNS
-  service types, and probes each host over HTTP. Each device is a card showing its
-  IP (a link that opens the device's web page), short/long name and — for
-  ArtNetEsp nodes — chip/firmware; source chips mark how it was found.
-- **Configure** — for an active (responding) device on the Scan list, opens a
-  full-screen editor that mirrors the firmware's web config UI
-  (General · Devices · System) and writes changes over the device REST API,
-  including reboot and WiFi-reset. For devices with HTTP auth enabled it tries the
-  default credentials from Settings (then any remembered for that device), asks
-  once if those fail, and remembers working credentials per device. See
-  [docs/DEVICE_CONFIG_PARITY.md](docs/DEVICE_CONFIG_PARITY.md).
-- **Monitor** — listens for `ArtDmx` on a chosen universe; a **Channels** sub-tab
-  shows the live 512-channel fader grid and a **Packets** sub-tab shows source IP,
-  packet count, last sequence and a rolling packet log. UI updates are throttled
-  (~10 Hz) so high packet rates never freeze the app.
-- **Transmit** — sends a valid 512-channel `ArtDmx` frame with one test channel
-  set. Carries a clear warning that it can drive real lighting.
-- **Info** — Wi-Fi/local-network status (IP, gateway, broadcast, mask), Art-Net +
-  mDNS counts, last scan times, and a live activity log. The network status
-  auto-refreshes when the device changes network (e.g. switching Wi-Fi), showing a
-  "Network changed" notice and recovering the Art-Net socket so the next scan
-  still works.
-- **Settings** — broadcast address, prefer-computed-broadcast toggle, Art-Net
-  UDP port, mDNS service types, listen timeout, monitor packet-log limit,
-  default device HTTP-auth credentials, debug-logging toggle. Persisted with
-  `shared_preferences`, except device credentials (default + per-device), which
-  are stored **encrypted** via `flutter_secure_storage` (Keychain / Android
-  Keystore).
+  <table border="0">
+    <tr>
+      <td>
+        <b>ArtNet Scan</b><br/>
+        One pass discovers devices three ways and merges the result:
+        it sends `ArtPoll` (UDP 6454) and parses `ArtPollReply`, browses the mDNS
+        service types, and probes each host over HTTP. Each device is a card showing its
+        IP (a link that opens the device's web page), short/long name and — for
+        ArtNetEsp nodes — chip/firmware; source chips mark how it was found.
+        </td>
+        <td>
+        <a href="docs/images/Screenshot_20260617_203854.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_203854.jpg" alt="Thumbnail Alt Text" width="100" />
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td colspan=2>
+        <b>Configure</b><br/>
+        For an active (responding) device on the Scan list, opens a
+        full-screen editor that mirrors the firmware's web config UI
+        (General · Devices · System) and writes changes over the device REST API,
+        including reboot and WiFi-reset. For devices with HTTP auth enabled it tries the
+        default credentials from Settings (then any remembered for that device), asks
+        once if those fail, and remembers working credentials per device. See
+        <a href="docs/DEVICE_CONFIG_PARITY.md">docs/DEVICE_CONFIG_PARITY.md</a>
+        <br/>
+        <div align="center">
+        <a href="docs/images/Screenshot_20260617_210330.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_210330.jpg" alt="Scan" width="100" />
+        </a>
+        <a href="docs/images/Screenshot_20260617_210352.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_210352.jpg" alt="Scan" width="100" />
+        </a>
+        <a href="docs/images/Screenshot_20260617_210401.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_210401.jpg" alt="Scan" width="100" />
+        </a>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Monitor</b><br/>
+        Listens for `ArtDmx` on a chosen universe; a **Channels** sub-tab
+        shows the live 512-channel fader grid and a **Packets** sub-tab shows source IP,
+        packet count, last sequence and a rolling packet log. UI updates are throttled
+        (~10 Hz) so high packet rates never freeze the app.
+      </td>
+      <td>
+        <a href="docs/images/Screenshot_20260617_203929.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_203929.jpg" alt="Monitor" width="200" />
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Transmit</b><br/>
+        Sends a valid 512-channel `ArtDmx` frame with one test channel
+        set. Carries a clear warning that it can drive real lighting.
+      </td>
+      <td>
+        <a href="docs/images/Screenshot_20260617_203944.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_203944.jpg" alt="Monitor" width="200" />
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Info</b><br/>
+        Wi-Fi/local-network status (IP, gateway, broadcast, mask), Art-Net +
+        mDNS counts, last scan times, and a live activity log. The network status
+        auto-refreshes when the device changes network (e.g. switching Wi-Fi), showing a
+        "Network changed" notice and recovering the Art-Net socket so the next scan
+        still works.
+      </td>
+      <td>
+        <a href="docs/images/Screenshot_20260617_204004.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_204004.jpg" alt="Monitor" width="200" />
+        </a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <b>Settings</b><br/>
+        Broadcast address, prefer-computed-broadcast toggle, Art-Net
+        UDP port, mDNS service types, listen timeout, monitor packet-log limit,
+        default device HTTP-auth credentials, debug-logging toggle. Persisted with
+        `shared_preferences`, except device credentials (default + per-device), which
+        are stored **encrypted** via `flutter_secure_storage` (Keychain / Android
+        Keystore)
+      </td>
+      <td>
+        <a href="docs/images/Screenshot_20260617_204035.jpg" target="_blank">
+          <img src="docs/images/Screenshot_20260617_204035.jpg" alt="Monitor" width="200" />
+        </a>
+      </td>
+    </tr>
+  </table>
 
 ## What it does NOT do (yet)
 
