@@ -5,6 +5,8 @@
 Discover **Art-Net** devices and control **ArtNetEsp** nodes on your local
 network.
 
+<img src="assets/icon/app_icon.png" height="64"/>
+
 ## Getting started
 
 1. [Build and deploy](#setup) the app.
