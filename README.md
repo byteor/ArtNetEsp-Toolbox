@@ -41,8 +41,8 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         IP (a link that opens the device's web page), short/long name and — for
         ArtNetEsp nodes — chip/firmware; source chips mark how it was found.
         </td>
-        <td>
-          <img src="docs/images/Screenshot_20260617_203854-thumb.jpg" alt="Thumbnail Alt Text" width="500"/>
+        <td width="200pt">
+          <img src="docs/images/Screenshot_20260617_203854-thumb.png" alt="Thumbnail Alt Text"/>
       </td>
     </tr>
     <tr>
@@ -57,9 +57,9 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         <a href="docs/DEVICE_CONFIG_PARITY.md">docs/DEVICE_CONFIG_PARITY.md</a>
         <br/>
         <div align="center">
-          <img src="docs/images/Screenshot_20260617_210330-thumb.jpg" alt="Scan" width="150" />
-          <img src="docs/images/Screenshot_20260617_210352-thumb.jpg" alt="Scan" width="150" />
-          <img src="docs/images/Screenshot_20260617_210401-thumb.jpg" alt="Scan" width="150" />
+          <img src="docs/images/Screenshot_20260617_210330-thumb.png" alt="Scan"/>
+          <img src="docs/images/Screenshot_20260617_210352-thumb.png" alt="Scan"/>
+          <img src="docs/images/Screenshot_20260617_210401-thumb.png" alt="Scan"/>
         </div>
       </td>
     </tr>
@@ -72,7 +72,7 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         (~10 Hz) so high packet rates never freeze the app.
       </td>
       <td>
-        <img src="docs/images/Screenshot_20260617_203929-thumb.jpg" alt="Monitor" width="500" />
+        <img src="docs/images/Screenshot_20260617_203929-thumb.png" alt="Monitor"  />
       </td>
     </tr>
     <tr>
@@ -82,7 +82,7 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         set. Carries a clear warning that it can drive real lighting.
       </td>
       <td>
-        <img src="docs/images/Screenshot_20260617_203944-thumb.jpg" alt="Monitor" width="500" />
+        <img src="docs/images/Screenshot_20260617_203944-thumb.png" alt="Monitor"  />
       </td>
     </tr>
     <tr>
@@ -95,7 +95,7 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         still works.
       </td>
       <td>
-        <img src="docs/images/Screenshot_20260617_204004-thumb.jpg" alt="Monitor" width="500" />
+        <img src="docs/images/Screenshot_20260617_204004-thumb.png" alt="Monitor"  />
       </td>
     </tr>
     <tr>
@@ -109,7 +109,7 @@ sockets; mDNS uses the OS service-discovery stack via the `nsd` plugin.
         Keystore)
       </td>
       <td>
-        <img src="docs/images/Screenshot_20260617_204035-thumb.jpg" alt="Monitor" width="500" />
+        <img src="docs/images/Screenshot_20260617_204035-thumb.png" alt="Monitor"  />
       </td>
     </tr>
   </table>
