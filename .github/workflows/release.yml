@@ -1,0 +1,131 @@
+name: Release APK
+
+# Builds a release APK and publishes a GitHub Release whenever a push to main
+# (i.e. a merged PR) changes the `version:` in pubspec.yaml. Merges that don't
+# touch the version run only the cheap "check-version" job and stop — no build,
+# no release. The `paths` filter keeps the workflow from even starting unless
+# pubspec.yaml is part of the push.
+on:
+  push:
+    branches: [main]
+    paths: ['pubspec.yaml']
+
+jobs:
+  check-version:
+    runs-on: ubuntu-latest
+    outputs:
+      changed: ${{ steps.detect.outputs.changed }}
+      version: ${{ steps.detect.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # need the "before" commit to diff pubspec.yaml against
+
+      - id: detect
+        env:
+          BEFORE: ${{ github.event.before }}
+        run: |
+          set -euo pipefail
+          extract() { sed -nE 's/^version:[[:space:]]*([^[:space:]#]+).*/\1/p' "$1"; }
+
+          CURRENT="$(extract pubspec.yaml)"
+          echo "version=$CURRENT" >> "$GITHUB_OUTPUT"
+
+          # No usable previous state (branch creation / forced reset): don't release.
+          if [[ -z "$BEFORE" || "$BEFORE" =~ ^0+$ ]]; then
+            echo "No previous commit to compare against; skipping release."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if PREV_FILE="$(git show "$BEFORE:pubspec.yaml" 2>/dev/null)"; then
+            PREVIOUS="$(printf '%s\n' "$PREV_FILE" \
+              | sed -nE 's/^version:[[:space:]]*([^[:space:]#]+).*/\1/p')"
+          else
+            PREVIOUS="" # pubspec.yaml is new in this push
+          fi
+
+          echo "Previous version: '${PREVIOUS:-<none>}'  ->  current: '$CURRENT'"
+          if [[ "$CURRENT" != "$PREVIOUS" ]]; then
+            echo "Version changed — will build and release."
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version unchanged — skipping release."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    needs: check-version
+    if: needs.check-version.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # required to create the release + tag
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - run: flutter pub get
+
+      # Decode the release keystore and write android/key.properties from repo
+      # secrets so Gradle uses the release signingConfig (see
+      # android/app/build.gradle.kts). Secrets come via env — never inlined into
+      # the script — so they stay out of logs and argv.
+      - name: Set up release signing
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          echo "$KEYSTORE_B64" | base64 -d > "$GITHUB_WORKSPACE/android/app/release.keystore"
+          cat > "$GITHUB_WORKSPACE/android/key.properties" <<EOF
+          storeFile=$GITHUB_WORKSPACE/android/app/release.keystore
+          storePassword=$STORE_PASSWORD
+          keyAlias=$KEY_ALIAS
+          keyPassword=$KEY_PASSWORD
+          EOF
+
+      - run: flutter build apk --release
+
+      # Belt-and-suspenders: fail loudly if the keystore wasn't applied and the
+      # APK is still debug-signed. Uses apksigner (reads the v2/v3 scheme Flutter
+      # signs with; keytool -jarfile only sees the legacy v1 signature).
+      - name: Confirm release signature (fail if debug)
+        run: |
+          set -euo pipefail
+          APK=build/app/outputs/flutter-apk/app-release.apk
+          APKSIGNER="$(ls -1 "${ANDROID_SDK_ROOT:-$ANDROID_HOME}"/build-tools/*/apksigner | sort -V | tail -1)"
+          "$APKSIGNER" verify --print-certs "$APK" | tee signer.txt
+          if grep -qi "Android Debug" signer.txt; then
+            echo "::error::APK is debug-signed — release keystore was not applied"
+            exit 1
+          fi
+
+      - name: Stage APK with version in the filename
+        env:
+          VERSION: ${{ needs.check-version.outputs.version }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist
+          # Sanitize the build-metadata '+' for the asset filename.
+          SAFE="${VERSION//+/-}"
+          cp build/app/outputs/flutter-apk/app-release.apk \
+             "dist/artnet_app-${SAFE}.apk"
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ needs.check-version.outputs.version }}
+          name: v${{ needs.check-version.outputs.version }}
+          generate_release_notes: true
+          files: dist/*.apk
