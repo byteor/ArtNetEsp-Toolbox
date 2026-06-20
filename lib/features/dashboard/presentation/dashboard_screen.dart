@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/app_info/app_info_providers.dart';
 import '../../../core/network/network_providers.dart';
 import '../../../shared/widgets/log_view.dart';
 
@@ -10,6 +11,7 @@ class DashboardScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final netAsync = ref.watch(localNetworkStatusProvider);
+    final appVersion = ref.watch(appVersionProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -101,6 +103,20 @@ class DashboardScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             const Expanded(child: LogView()),
+            appVersion.when(
+              data: (v) => Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'App version $v',
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
+              ),
+              loading: () => const SizedBox.shrink(),
+              error: (_, _) => const SizedBox.shrink(),
+            ),
           ],
         ),
       ),
