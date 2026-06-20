@@ -120,7 +120,7 @@ jobs:
           # Sanitize the build-metadata '+' for the asset filename.
           SAFE="${VERSION//+/-}"
           cp build/app/outputs/flutter-apk/app-release.apk \
-             "dist/artnet_app-${SAFE}.apk"
+             "dist/ArtNetEsp-Toolbox-${SAFE}.apk"
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v3
